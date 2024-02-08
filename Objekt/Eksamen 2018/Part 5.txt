@@ -1,0 +1,2 @@
+a)
+DiceScorer is a functional interface because it only contains one abstract method.

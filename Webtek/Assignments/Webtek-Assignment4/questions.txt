@@ -1,0 +1,3 @@
+1. Mobile phones may ignore autoplay because the media queries makes them. It may also be to save mobile data or because it can be a greater annoyance on such a small screen.
+2. The CSS section won't do anything if the resolution is 320x568 since it is less than the minimal width of 768px. The browser will display something with logo as ID since it is not disabled by the CSS.
+3. Advantages of having a single responsive website is that it is the same HTML and CSS so if you have to make changes you dont have to duplicate them. Also there will be more clutter when sharing your webpage when you have two separate addresses. It is also a lot cleaner to have a responsive website when resizing to a smaller window on a desktop.

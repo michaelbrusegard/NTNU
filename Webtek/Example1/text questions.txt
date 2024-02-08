@@ -1,0 +1,93 @@
+What is the correct HTML for making a text input field?
+C. <input type="text">
+
+How do you display hyperlinks without an underline?
+B. a {text-decoration:none;}
+
+How do you display a border like this:
+A. border-width:10px 1px 5px 20px;
+
+What is the correct JavaScript syntax to change the content of the HTML element below?
+<p id="demo">This is a demonstration.</p>
+A. document.getElementById("demo").innerHTML = "Hello World!";
+
+If you wanted to round the corners of a block element, which style property would you apply?
+D. border-radius:
+
+Consider the table shown below. Which line of code would create the last row of the table?
+D. <tr><td colspan=”2”></td></tr>
+
+How many alert boxes will the following loop produce?
+for ( var Index = 0; Index <= 2; ++Index )
+alert( Index );
+D. 3
+
+Which of the following is the code for accessing the contents of an input box named userData
+on a form?
+B. document.forms[0].userData.value
+
+Given a file structure in the figure below, if you are working on the source code of index.html, which of the following is the correct relative URL for lecture1.html?
+B. lectures/lecture1.html
+
+The syntax for adding a textfield of 3 rows, each of width 40 is:
+D. <textarea rows=”3” cols=”40”>blah blah</textarea>
+
+Indicate whether each of the following statements is True or False
+A. True
+B. False
+C. False
+D. False
+
+What is the output when you run the following programs:
+A. True
+B. False
+C. True
+D. True
+E. True
+F. False
+G. True
+H. True
+
+The purpose of TCP is to ensure the integrity of network communication.
+Dynamic routing is a technique to select the best route according to the network conditions at the time of transmission.
+What is the required attribute of the <video> element in HTML5, when the video is in a single format? src
+Consider the following JavaScript statement:
+var myLinks = getElementsByTagName(“a”);
+What is the data type of the result? Array
+If you want to control which element sits on the top (when elements overlap) you use the z-index property.
+The content part of the box (box model), is where text and images appear.
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        /* unvisited link */
+            a:link {
+            background-color: lightblue;
+        }
+
+        /* visited link */
+            a:visited {
+            background-color: lightblue;
+        }
+
+        /* mouse over link */
+            a:hover {
+            background-color: yellow;
+        }
+
+        /* selected link */
+            a:active{
+            background-color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>This is a Heading</h1>
+    <p>This is a paragraph.</p>
+    <p><a href="http://www.ntnu.no">NTNU</a></p>
+</body>
+
+</html>

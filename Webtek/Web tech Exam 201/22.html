@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    let proceed = 0;
+    let myTea = "";
+    let chosenTea;
+
+    function getSelectedText(selectList) {
+        return selectList.options[selectList.selectedIndex].text;
+    }
+
+    function getRadioValue(radioArray) {
+        let i;
+        for (i = 0; i < radioArray.length; i++) {
+            if (radioArray[i].checked) {
+                return radioArray[i].value;
+            }
+        }
+        return "";
+    }
+
+    function getSelectedValue(selectList) {
+        return selectList.options[selectList.selectedIndex].value;
+    }
+
+    function view(form) {
+        let termsconds = form.terms.
+        let tea = getRadioValue()
+        let = parseInt(getSelectedValue(form.size))
+        let allergies = form.allergies.value;
+        let champagne = form.champ.
+        let champText = "";
+        if (champagne == ) {
+            special = 10;
+            champText =
+        } else {
+            special = 0;
+            champText = "";
+        }
+        if (tea != "") {
+            teaprice =
+        } else {
+            teaprice = 0;
+        }
+        totalprice = (teaprice + special) * multiplier;
+        if (allergies != "") {
+            additional = "allergies to: " + allergies;
+        } else {
+            additional = "no food allergy";
+        }
+        form.price.value = totalprice;
+        if(proceed == 1) {
+            
+        }
+    }
+</script>
+<style>
+
+</style>
+<body>
+    
+</body>
+</html>

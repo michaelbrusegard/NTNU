@@ -1,0 +1,8 @@
+<HBoxxmlns:fx="http://javafx.com/fxml/1" fx:controller="ord2018.farkle.fx.DiceController">
+   <!--  text field for inputing the die count -->
+   <TextField fx:id="dieCountInput" promptText="Die count"/>
+   <!--  button for throwing the dice, i.e. create a Dice object and computing the score -->
+   <Button onAction="#handleThrowDice" text="Throw dice"/>
+   <!--  label for outputing the textual representation of the Dice object -->
+   <Label fx:id="diceOutput" text="No dice thrown, yet"/>
+</HBox>

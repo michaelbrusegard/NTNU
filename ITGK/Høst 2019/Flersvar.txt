@@ -1,0 +1,47 @@
+Hva er Photolithography (fotolitografi)?
+A: En teknikk som har gjort at integrerte kretser i transistorer har blitt mer suksessfulle, hvor ledninger og andre deler printes på chipene i flere lag.
+
+Hva er ENIAC?
+C: Verdens første programmerbare elektroniske datamaskin.
+
+Hva sier Moores lov?
+C: Loven sier at antall transistorer i en integrert krets dobles hvert 2. år
+
+Hvilket steg i “Fetch/Execute Cycle” flytter verdiene fra RAM (minnet) til ALU?
+C: Data Fetch
+
+Hva er hovedoppgaven til ALU?
+A: Utføre regneoperasjoner
+
+Hva er sant om run-length-koding?
+B: Run-length-koding er tapsløs komprimering, dvs. at den originale representasjonen av 0ere og 1ere kan bli rekonstruert perfekt fra den komprimerte versjonen.
+
+Hvilket binærtall representerer det heksadesimale tallet D52F?
+B: 1101 0101 0010 1111
+
+Et bilde har 1920x1080 piksler i 32bit fargeformat. Hvor mye plass trenger det ukomprimert?
+B: Omtrent 8MB
+
+Hva blir -85 i 2ers-kompliment representert med 8 bit?
+B: 1010 1011
+
+Hvor mange symboler kan representeres med 9 bit?
+A: 512
+
+Hva er DoS (Denial-of-Service)?
+B: Å gjøre en tjener (server) utilgjengelig for brukerne ved å sende enorme mengder datapakker.
+
+Hva er spoofing?
+A: Bruk av falsk IP-kildeadresse for å lure mottaker til å prosessere pakken, ved å f.eks. benytte seg av falske e-postavsendere eller å misbruke domenenavn.
+
+Hvordan vurderer man dataintegritet (hva vurderes ved dataintegritet)?
+A: Sjekker om dataene som sendes er identiske med dataene som mottas.
+
+Hva er IKKE sant om hashing?
+A: Hashing avdekker det meste av endringer gjort med en melding, men kan ikke garantere 100% at en endring har skjedd.
+
+Hvordan fungerer kryptering med offentlig nøkkel (public key encryption)?
+A: Hver part får en hemmelig og en offentlig nøkkel. En melding kryptert med en offentlig nøkkel kan kun dekrypteres med den korresponderende private nøkkelen.
+
+Hvilken form for kanalkoding (channel coding) bruker Internettet vanligvis?
+C: 16-bit sjekksum (16-bit checksum)

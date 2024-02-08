@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<canvas id="myCanvas" width="400" height="120" style="border:1px solid #d3d3d3;">
+
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+    const canvas = document.getElementById("myCanvas")
+    const ctx = canvas.getContext("2d");
+    
+    ctx.beginPath()
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    
+    // Pacman body
+    ctx.arc(60, 60, 50, 45 * Math.pi / 180, 315 * Math.pi / 180)
+    ctx.moveTo(60, 60)
+    ctx.lineTo(95, 25)
+    ctx.moveTo(60, 60)
+    ctx.lineTo(95, 95)
+    ctx.stroke()
+    
+    // Pacman eye
+    ctx.beginPath()
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 6;
+    ctx.arc(60, 30, 4, 0, 360 * Math.pi / 180)
+    ctx.stroke()
+    
+    // Ghost eyes
+    ctx.beginPath()
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.arc(160, 40, 8, 0, 360 * Math.pi / 180)
+    ctx.arc(200, 40, 8, 0, 360 * Math.pi / 180)
+    ctx.stroke()
+    
+    // Ghost body
+    ctx.beginPath()
+    ctx.strokeStyle = "gray";
+    ctx.lineWidth = 3;
+    ctx.moveTo(140, 50)
+    ctx.quadraticCurveTo(180, 0, 220, 50)
+    ctx.lineTo(100, 220)
+    ctx.lineTo(85, 205)
+    ctx.lineTo(100, 180)
+    ctx.lineTo(85, 155)
+    ctx.lineTo(100, 140)
+    ctx.lineTo(140, 50)
+    ctx.stroke()
+</script>
+
+</body> 
+</html>

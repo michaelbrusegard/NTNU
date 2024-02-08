@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.java">
+   <children>
+      <Pane prefHeight="124.0" prefWidth="226.0">
+         <children>
+            <Button layoutX="137.0" layoutY="34.0" mnemonicParsing="false" onAction="#handleKvadrer" prefHeight="33.0" prefWidth="66.0" text="Kvadrer:">
+            </Button>
+            <TextField fx:id="input" layoutX="39.0" layoutY="34.0" prefHeight="33.0" prefWidth="85.0" promptText="Tall:">
+            </TextField>
+            <Text fx:id="output" layoutX="41.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kvadratet skal skrives her" wrappingWidth="166.0">
+            </Text>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

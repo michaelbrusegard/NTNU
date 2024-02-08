@@ -1,0 +1,16 @@
+@startuml Part 4
+object FarkleRound {
+dieCount = 5
+}
+
+object dice1 {
+    dieValues = 1, 5
+}
+
+object dice2 {
+    dieValues = 5
+}
+
+FarkleRound --> dice2:kept
+FarkleRound --> dice1:kept
+@enduml

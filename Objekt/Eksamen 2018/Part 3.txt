@@ -1,0 +1,10 @@
+a) 
+1. Alternative 3 is correct because an interface should not include any constructors or static methods.
+2. Alternative 4 is correct, when using an interface with a class that implements Iterable<Integer>, the interface must extend the Iterable and can list the methods from the Iterable.
+
+b)
+To handle score in a similar manner over all the implementations of the Dice interface, we can create an abstract super class that implements Dice. 
+For every specific Dice implementation we can inherit from this abstract super class.
+We can also implement other methods like toString and getValueCount because they do not utilise any specific variables from the specific dice object and rather use the Iterable.
+
+c)

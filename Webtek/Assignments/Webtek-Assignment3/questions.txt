@@ -1,0 +1,2 @@
+1. Position absolute adjusts its position relative to its parent element while position fixed asjusts relative to the browser's viewport.
+2. To access the third element within another element in CSS3 you can use  a selector called nth-child(n) where you put n as 3.

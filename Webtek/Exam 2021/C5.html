@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html> 
+<body>
+<canvas id="myCanvas" width="400" height="120" style="border:1px solid #d3d3d3;"> Your browser does not support the HTML5 canvas tag.</canvas>
+<script>
+    const myCanvas = document.getElementById("myCanvas");
+    const ctx = myCanvas.getContext("2d");
+    myCanvas.style.background = "black";
+
+    //pacman
+    ctx.beginPath();
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 5;
+    ctx.arc(60, 60, 50, 40 * Math.PI/180, 320 * Math.PI/180);
+    ctx.moveTo(60, 60);
+    ctx.lineTo(98, 25);
+    ctx.moveTo(60, 60)
+    ctx.stroke();
+</script>
+</body> 
+</html>

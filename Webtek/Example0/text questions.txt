@@ -1,0 +1,107 @@
+The elements <div> and <span> have the following characteristics
+C. Elements <span> and <div> define content to be inline or block-level
+
+In regards to the CSS box model, where is the margin property located?
+B. Outside the box
+
+Which built-in HTML5 object is used to draw on the canvas?
+A. getContext
+
+While working on a JavaScript project, which function would you use to send messages to users requesting for text input?
+B. Prompt()
+
+In HTML tables, the number of columns is determined by
+A. how many <td> elements are inserted within each row
+
+If you'd like visited links to be green, unvisited links to be blue, and links that the mouse is over to be red, which CSS rules will you use?
+B. a:link { color: blue } a:visited { color: green } a:hover { color: red }
+
+Which HTML attribute specifies an alternate text for an image, if the image cannot be displayed?
+C. alt
+
+State an image file format best suited to presenting photographic images on the Web
+JPEG
+
+State an image file format best suited to presenting non-photographic images on the Web
+PNG
+
+Indicate whether each of the following statements is True or False
+A. True
+B. False
+C. True
+D. True
+E. True
+F. False
+
+Briefly state TWO advantages of vector images over bitmapped images for displaying images on the Web
+Scaleable and editable
+
+Name each of the 4 required elements of a CSS rule and very briefly state the purpose of each part
+Selector, identifies the HTML tag to be styled
+Declaration, encapsulates Properties and Values
+Property, identifies the aspect of the HTML tag to be styled
+Value, specifies the value of the property
+
+What does the following HTML code?
+<area shape="rect" coords="384,66,499,271" href="water.html">
+It sets an area in the shape of a rectangle with the top corner set to 384,66 and the bottom corner set to 499,271. 
+The area is linked to the water.html page.
+
+Develop a web-form to collect the following information: name of the student •
+his/her email address
+<form>
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name">
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+<form\>
+
+What is the result of the following code?
+9
+
+What is the result of the following code?
+a is 2
+
+What is specificity in CSS, no need to write more than 4-5 sentences
+Specificity is the way that the browser decides which CSS rule to apply to an element. 
+The browser will apply the rule with the highest specificity. 
+The specificity is determined by the number of each type of selector in the rule. 
+The order of specificity is as follows: 1. Inline styles 2. IDs 3. Classes, attributes and pseudo-classes 4. Elements and pseudo-elements
+
+p > b {
+    color: green;
+}
+
+h2 + p {
+    color: green;
+}
+
+p {
+    font-family: Fantasy;
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+A.
+Missing quotes on the days in the array
+For loop span should start at i = 0
+The if statement should have double or triple equals
+Missing the + operator in the document.write strings
+It should be i instead if today in the else statement
+
+B.
+It will not run since it will treat the days as variables
+It wont be able to output Sunday
+It will run forever since it assigns a variable in the for statement
+It will not run since it cant combine the string
+It will print out a wrong statement when the else occurs
+
+5.
+function insert_Row() {
+    var x = document.getElementById('sampleTable').insertRow(0);
+    var y = x.insertCell(0);
+    var z = x.insertCell(1);
+    y.innerHTML = "New Cell1";
+    z.innerHTML = "New Cell2";
+}

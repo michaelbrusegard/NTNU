@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <canvas id="Canvas1" width="150" height="150" style="border:1px solid #d3d3d3;">Your browser does not support
+        canvas.</canvas>
+    <script>
+        const canvas = document.getElementById("Canvas1");
+        const ctx = canvas.getContext("2d");
+
+        // draw the rectangle 
+        ctx.beginPath(); 
+        ctx.strokeStyle = "blue"; 
+        ctx.lineWidth = 5; 
+        ctx.strokeRect(5, 5, 140, 140);
+        // draw the cicle
+        ctx.beginPath();
+        ctx.lineWidth = 5; 
+        ctx.arc(75, 75, 70, 0, Math.PI * 2, true); 
+        ctx.stroke();
+        // draw the crossed lines 
+        ctx.beginPath(); 
+        ctx.lineWidth = 5; 
+        ctx.moveTo(5, 75); 
+        ctx.lineTo(145, 75); 
+        ctx.moveTo(75, 5); 
+        ctx.lineTo(75, 145); 
+        ctx.stroke(); 
+        ctx.stroke();
+    </script>
+</body>
+
+</html>

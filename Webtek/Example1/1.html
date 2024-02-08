@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form>
+        <label for="number1">number1:</label><br>
+        <input type="number" id="number1" name="number1"><br>
+        <label for="number2">number2:</label><br>
+        <input type="number" id="number2" name="number2"><br>
+        <input type="button" value="click" onclick=largest();><br>
+        <label id="num"></label><br>
+    </form>
+    <table id="sampleTable" style="border: 2px solid">
+        <tr>
+            <td>Row1 cell1</td>
+            <td>Row1 cell2</td>
+        </tr>
+        <tr>
+            <td>Row2 cell1</td>
+            <td>Row2 cell2</td>
+        </tr>
+    </table><br>
+    <input type="button" onclick="insert_Row()" value="Insert row">
+    <button onclick="myFunction()">Try it</button>
+    <p id="demo"></p>
+    <canvas id="Canvas1" width="150" height="150" style="border:1px solid #d3d3d3;">Your browser does not support
+        canvas.</canvas>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        });
+
+        function largest() {
+            const num = document.getElementById("num");
+            const num1 = parseInt(document.getElementById("number1").value);
+            const num2 = parseInt(document.getElementById("number2").value);
+            if (num1 > num2) {
+                num.innerHTML = num1 + " is larger than " + num2;
+            } else if (num2 > num1) {
+                num.innerHTML = num2 + " is larger than " + num1;
+            } else {
+                num.innerHTML = "Both numbers are equal";
+            }
+        }
+
+        function changeImage() {
+            const image = document.getElementById("myImage");
+            if (image.src.match("pic_bulboff.gif")) {
+                image.src = "pic_bulbon.gif";
+            } else {
+                image.src = "pic_bulboff.gif";
+            }
+        }
+
+        function insert_Row() {
+            var x = document.getElementById('sampleTable').insertRow(-1);
+            var y = x.insertCell(0);
+            var z = x.insertCell(1);
+            y.innerHTML = "New Cell1";
+            z.innerHTML = "New Cell2";
+        }
+
+        function myFunction() {
+            let text = "";
+            let i = 0;
+            while (i < 10) {
+                text += "The number is " + i + "<br>";
+                i++;
+            }
+            document.getElementById("demo").innerHTML = text;
+        }
+
+        const canvas = document.getElementById("Canvas1");
+        const ctx = canvas.getContext("2d");
+
+        // draw the rectangle 
+        ctx.beginPath();
+        ctx.strokeStyle = "blue";
+        ctx.lineWidth = 5;
+        ctx.strokeRect(5, 5, 140, 140);
+        // draw the cicle
+        ctx.beginPath();
+        ctx.lineWidth = 5;
+        ctx.arc(75, 75, 70, 0, Math.PI * 2, true);
+        ctx.stroke();
+        // draw the crossed lines 
+        ctx.beginPath();
+        ctx.lineWidth = 5;
+        ctx.moveTo(5, 75);
+        ctx.lineTo(145, 75);
+        ctx.moveTo(75, 5);
+        ctx.lineTo(75, 145);
+        ctx.stroke();
+        ctx.stroke();
+    </script>
+</body>
+
+</html>

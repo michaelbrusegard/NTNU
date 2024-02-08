@@ -1,0 +1,5 @@
+1. Inline style CSS overrides stylesheets because if you have a general style in your stylesheet that covers multiple elements and you want to change a small part of one of those elements you can just use inline css.
+2. You should use ID when it is for an unique element and use classes when you are gonna use it for multiple elements.
+3. RGBA means Red, Green, Blue and Alpha. You can express all colours in the RGB spectrum, that means colours with red, green and blue and them mixed together aswell as transparency which is determined by the alpha value.
+4. We put the CSS style sheets in the head element so it is loaded before we load the body.
+5. arcticle p {} will match all the p elements inside the article element.

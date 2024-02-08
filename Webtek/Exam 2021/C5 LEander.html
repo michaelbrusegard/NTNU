@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html> <body>
+<canvas id="myCanvas" width="400" height="120" style="border:1px solid #d3d3d3;"> Your browser does not support the HTML5 canvas tag.</canvas>
+<script>
+var myCanvas = document.getElementById("myCanvas"); var ctx = myCanvas.getContext("2d");
+ctx.fillStyle = "#000000";
+ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+//Body
+ctx.beginPath();
+ctx.arc(50, 60, 50, 0.25 * Math.PI, 1.25 * Math.PI); ctx.lineWidth = 5;
+ctx.strokeStyle = "white";
+ctx.stroke();
+ctx.beginPath();
+ctx.arc(50, 60, 50, 0.75 * Math.PI, 1.75 * Math.PI); ctx.lineWidth = 5;
+ctx.stroke();
+
+//Eye 
+ctx.beginPath();
+ctx.arc(50, 35, 7.5, 0, 2 * Math.PI); ctx.fillStyle = "white";
+ctx.fill();
+//Mouth
+ctx.beginPath(); ctx.moveTo(50, 60); ctx.lineTo(88, 20); ctx.lineWidth = 5; ctx.strokeStyle = "white"; ctx.stroke();
+ctx.beginPath(); ctx.moveTo(50, 60); ctx.lineTo(88, 100); ctx.lineWidth = 5; ctx.strokeStyle = "white"; ctx.stroke();
+//Food
+ctx.beginPath();
+ctx.arc(100, 60, 15, 0, 2 * Math.PI); ctx.lineWidth = 5;
+ctx.strokeStyle = "white"; ctx.stroke();
+ctx.beginPath();
+ctx.arc(150, 60, 15, 0, 2 * Math.PI); ctx.lineWidth = 5;
+ctx.strokeStyle = "white"; ctx.stroke();
+ctx.beginPath();
+ctx.arc(275, 60, 15, 0, 2 * Math.PI); ctx.lineWidth = 5;
+ctx.strokeStyle = "white"; ctx.stroke();
+//Cherry
+//Circles
+ctx.beginPath();
+ctx.arc(200, 75, 10, 0, 2 * Math.PI);
+ctx.lineWidth = 2.5;
+ctx.strokeStyle = "white";
+ctx.stroke();
+ctx.beginPath();
+ctx.arc(220, 80, 7.5, 0, 2 * Math.PI);
+ctx.lineWidth = 2.5;
+ctx.strokeStyle = "white";
+ctx.stroke();
+//Stick things
+ctx.beginPath();
+ctx.moveTo(215, 55);
+ctx.bezierCurveTo(215, 25, 220, 55, 205, 65);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(215, 55);
+ctx.bezierCurveTo(215, 25, 225, 55, 222.5, 75);
+ctx.stroke();
+//Ghost
+//Pointy lines
+ctx.beginPath();
+ctx.moveTo(310, 110);
+ctx.lineTo(320, 90);
+ctx.moveTo(320, 90);
+ctx.lineTo(330, 110);
+ctx.moveTo(330, 110);
+ctx.lineTo(340, 90);
+ctx.moveTo(340, 90);
+ctx.lineTo(350, 110);
+ctx.moveTo(350, 110);
+ctx.lineTo(360, 90);
+ctx.moveTo(360, 90);
+ctx.lineTo(370, 110);
+ctx.stroke();
+//Body
+ctx.beginPath();
+ctx.moveTo(310, 110);
+ctx.bezierCurveTo(290, -10, 390, -10, 370, 110);
+ctx.stroke();
+//Eyes
+ctx.beginPath();
+ctx.arc(330, 40, 5, 0, 2 * Math.PI);
+ctx.fill();
+ctx.beginPath();
+ctx.arc(350, 40, 5, 0, 2 * Math.PI);
+ctx.fill();
+</script>
+</body> </html>

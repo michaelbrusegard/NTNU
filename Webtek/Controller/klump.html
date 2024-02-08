@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id='canvas' width='400' height='120' style='border:1px solid black'></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        
+        ctx.beginPath();
+        ctx.moveTo(60, 20);
+        ctx.quadraticCurveTo(60, 10, 80, 10);
+        ctx.lineTo(130, 10);
+        ctx.quadraticCurveTo(150, 10, 150, 20);
+        ctx.lineTo(250, 20);
+        ctx.quadraticCurveTo(250, 10, 270, 10);
+        ctx.lineTo(320, 10);
+        ctx.quadraticCurveTo(340, 10, 340, 20);
+        ctx.quadraticCurveTo(360, 30, 360, 40);
+        ctx.lineTo(380, 90);
+        ctx.quadraticCurveTo(390, 105, 360, 110);
+        ctx.lineTo(320, 120);
+        ctx.quadraticCurveTo(290, 125, 280, 100);
+        ctx.lineTo(250, 60);
+        ctx.lineTo(150, 60);
+        ctx.lineTo(120, 100);
+        ctx.quadraticCurveTo(110, 125, 80, 120);
+        ctx.lineTo(40, 110);
+        ctx.quadraticCurveTo(10, 105, 20, 90);
+        ctx.lineTo(40, 40);
+        ctx.quadraticCurveTo(40, 30, 60, 20);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(315, 40, 10, 0, 2 * Math.PI);
+        ctx.moveTo(285, 40);
+        ctx.arc(275, 40, 10, 0, 2 * Math.PI);
+        ctx.moveTo(305, 25);
+        ctx.arc(295, 25, 10, 0, 2 * Math.PI);
+        ctx.moveTo(305, 55);
+        ctx.arc(295, 55, 10, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(205, 30);
+        ctx.lineTo(205, 50);
+        ctx.lineTo(225, 50);
+        ctx.lineTo(230, 40);
+        ctx.lineTo(225, 30);
+        ctx.lineTo(205, 30);
+
+        ctx.moveTo(195, 30);
+        ctx.lineTo(195, 50);
+        ctx.lineTo(175, 50);
+        ctx.lineTo(170, 40);
+        ctx.lineTo(175, 30);
+        ctx.lineTo(195, 30);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(135, 30);
+        ctx.lineTo(135, 50);
+        ctx.lineTo(115, 50);
+        ctx.lineTo(110, 40);
+        ctx.lineTo(115, 30);
+        ctx.lineTo(135, 30);
+
+        ctx.moveTo(65, 30);
+        ctx.lineTo(65, 50);
+        ctx.lineTo(85, 50);
+        ctx.lineTo(90, 40);
+        ctx.lineTo(85, 30);
+        ctx.lineTo(65, 30);
+
+        ctx.moveTo(90, 15);
+        ctx.lineTo(90, 35);
+        ctx.lineTo(100, 40);
+        ctx.lineTo(110, 35);
+        ctx.lineTo(110, 15);
+        ctx.lineTo(90, 15);
+
+        ctx.moveTo(90, 65);
+        ctx.lineTo(90, 45);
+        ctx.lineTo(100, 40);
+        ctx.lineTo(110, 45);
+        ctx.lineTo(110, 65);
+        ctx.lineTo(90, 65);
+
+        ctx.stroke()
+    </script>
+</body>
+
+</html>

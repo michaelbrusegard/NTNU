@@ -1,0 +1,5 @@
+1. The expression 0.1 + 0.2 === 0.3 evaluates to false because it is using float numbers, and float numbers are limited by the computers memory. The answer will be a approximation and 0.30000000000000004 is not equal to 0.3.
+2. The method attribute specifies how to send form-data. It can be either GET or POST. Get is not secure and adds the data into the URL, while POST appends the data inside the body of the request so the data is not shown in the URL. POST has no size limitations compared to GET.
+3. The form fields appear in the URL when using the GET method because that is how it transfers the data.
+4. It is considered bad practice to only validate form input with HTML and/or Javascript since you only do checks client side and you dont have any security then. Features as required/pattern are to make it easier for the user with visual alerts not to create security.
+5. You should use textarea as input when you require a multi-line text input.

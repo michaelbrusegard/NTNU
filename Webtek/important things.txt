@@ -1,0 +1,3 @@
+css selectors
+canvas syntax
+post vs get

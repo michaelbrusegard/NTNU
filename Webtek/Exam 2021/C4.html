@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<form>
+    <label for="number1">number1:</label>
+    <input type="number" id="number1" name="number1"><br>
+    <label for="number2">number2:</label>
+    <input type="number" id="number2" name="number2"><br>
+    <input type="button" value="Multiply" onclick="multiply()">
+    <input type="button" value="Divide" onclick="divide()"><br>
+    <label id='answer'></label>
+</form>
+</body>
+<script>
+    function multiply() {
+        const ans = document.getElementById("answer")
+        const num1 = parseInt(document.getElementById("number1").value);
+        const num2 = parseInt(document.getElementById("number2").value);
+        ans.innerHTML = "The result is: " + String(num1 * num2);
+    }
+    function divide() {
+        const ans = document.getElementById("answer")
+        const num1 = parseInt(document.getElementById("number1").value);
+        const num2 = parseInt(document.getElementById("number2").value);
+        ans.innerHTML ="The result is: " + String(num1 / num2);
+    }
+</script>
+</html>
