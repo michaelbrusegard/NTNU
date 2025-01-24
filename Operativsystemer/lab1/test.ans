@@ -68,38 +68,38 @@ riscv64-unknown-elf-objdump -S kernel/kernel > kernel/kernel.asm
 riscv64-unknown-elf-objdump -t kernel/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel/kernel.sym
 == Test [MANDATORY] hello, no args == 
 $ make qemu-gdb
-[MANDATORY] hello, no args: [32mOK[0m (4.0s) 
+[MANDATORY] hello, no args: [32mOK[0m (3.5s) 
 == Test [MANDATORY] hello John == 
 $ make qemu-gdb
-[MANDATORY] hello John: [32mOK[0m (1.1s) 
+[MANDATORY] hello John: [32mOK[0m (1.0s) 
 == Test [MANDATORY] hello John Doe == 
 $ make qemu-gdb
-[MANDATORY] hello John Doe: [32mOK[0m (1.1s) 
+[MANDATORY] hello John Doe: [32mOK[0m (1.0s) 
 == Test [MANDATORY] empty ps == 
 $ make qemu-gdb
-[MANDATORY] empty ps: [32mOK[0m (1.0s) 
+[MANDATORY] empty ps: [32mOK[0m (1.1s) 
 == Test [MANDATORY] shell shell ps == 
 $ make qemu-gdb
 [MANDATORY] shell shell ps: [32mOK[0m (1.1s) 
 == Test [OPTIONAL] proctree exists == 
 $ make qemu-gdb
-(1.0s) 
+(1.1s) 
     ...
          init: starting sh
          $ proctree
     [31mBAD [0m exec proctree failed
-         $ qemu-system-riscv64: terminating on signal 15 from pid 13580 (<unknown process>)
+         $ qemu-system-riscv64: terminating on signal 15 from pid 15716 (<unknown process>)
     unexpected lines in output
     QEMU output saved to xv6.out.proctree_exists
 == Test [OPTIONAL] empty proctree == 
 $ make qemu-gdb
-(1.1s) 
+(1.0s) 
     ...
          $ proctree
          exec proctree failed
          $ echo OK
     [32mGOOD[0m OK
-         $ qemu-system-riscv64: terminating on signal 15 from pid 13614 (<unknown process>)
+         $ qemu-system-riscv64: terminating on signal 15 from pid 15750 (<unknown process>)
     [31mMISSING[0m '^init \(1\)\: 2$'
     [31mMISSING[0m '^\|\-sh \(2\)\: 2$'
     [31mMISSING[0m '^  \|\-proctree \(3\)\: 4$'
@@ -112,7 +112,7 @@ $ make qemu-gdb
          exec proctree failed
          $ echo OK
     [32mGOOD[0m OK
-         $ qemu-system-riscv64: terminating on signal 15 from pid 13644 (<unknown process>)
+         $ qemu-system-riscv64: terminating on signal 15 from pid 15776 (<unknown process>)
     [31mMISSING[0m '^init \(1\)\: 2$'
     [31mMISSING[0m '^\|\-sh \(2\)\: 2$'
     [31mMISSING[0m '^  \|\-sh \(3\)\: 2$'

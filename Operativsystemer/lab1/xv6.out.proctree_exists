@@ -6,4 +6,4 @@ hart 1 starting
 init: starting sh
 $ proctree
 exec proctree failed
-$ qemu-system-riscv64: terminating on signal 15 from pid 13580 (<unknown process>)
+$ qemu-system-riscv64: terminating on signal 15 from pid 15716 (<unknown process>)
