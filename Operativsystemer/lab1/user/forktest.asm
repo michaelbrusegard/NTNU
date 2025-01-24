@@ -46,7 +46,7 @@ forktest(void)
 
   print("fork test\n");
   3c:	00000517          	auipc	a0,0x0
-  40:	69450513          	addi	a0,a0,1684 # 6d0 <uptime+0xa>
+  40:	69c50513          	addi	a0,a0,1692 # 6d8 <ps+0xa>
   44:	00000097          	auipc	ra,0x0
   48:	fbc080e7          	jalr	-68(ra) # 0 <print>
 
@@ -91,7 +91,7 @@ forktest(void)
   a6:	04f71963          	bne	a4,a5,f8 <forktest+0xc4>
     print("fork claimed to work N times!\n");
   aa:	00000517          	auipc	a0,0x0
-  ae:	63650513          	addi	a0,a0,1590 # 6e0 <uptime+0x1a>
+  ae:	63e50513          	addi	a0,a0,1598 # 6e8 <ps+0x1a>
   b2:	00000097          	auipc	ra,0x0
   b6:	f4e080e7          	jalr	-178(ra) # 0 <print>
     exit(1);
@@ -109,7 +109,7 @@ forktest(void)
   d0:	0007df63          	bgez	a5,ee <forktest+0xba>
       print("wait stopped early\n");
   d4:	00000517          	auipc	a0,0x0
-  d8:	62c50513          	addi	a0,a0,1580 # 700 <uptime+0x3a>
+  d8:	63450513          	addi	a0,a0,1588 # 708 <ps+0x3a>
   dc:	00000097          	auipc	ra,0x0
   e0:	f24080e7          	jalr	-220(ra) # 0 <print>
       exit(1);
@@ -136,7 +136,7 @@ forktest(void)
  112:	00f70f63          	beq	a4,a5,130 <forktest+0xfc>
     print("wait got too many\n");
  116:	00000517          	auipc	a0,0x0
- 11a:	60250513          	addi	a0,a0,1538 # 718 <uptime+0x52>
+ 11a:	60a50513          	addi	a0,a0,1546 # 720 <ps+0x52>
  11e:	00000097          	auipc	ra,0x0
  122:	ee2080e7          	jalr	-286(ra) # 0 <print>
     exit(1);
@@ -147,7 +147,7 @@ forktest(void)
 
   print("fork test OK\n");
  130:	00000517          	auipc	a0,0x0
- 134:	60050513          	addi	a0,a0,1536 # 730 <uptime+0x6a>
+ 134:	60850513          	addi	a0,a0,1544 # 738 <ps+0x6a>
  138:	00000097          	auipc	ra,0x0
  13c:	ec8080e7          	jalr	-312(ra) # 0 <print>
 }
@@ -957,3 +957,13 @@ uptime:
  6c8:	00000073          	ecall
  ret
  6cc:	8082                	ret
+
+00000000000006ce <ps>:
+.global ps
+ps:
+ li a7, SYS_ps
+ 6ce:	48d9                	li	a7,22
+ ecall
+ 6d0:	00000073          	ecall
+ ret
+ 6d4:	8082                	ret

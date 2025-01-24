@@ -681,3 +681,15 @@ procdump(void)
     printf("\n");
   }
 }
+
+int
+sys_ps(void)
+{
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++) {
+    if(p->state == UNUSED)
+      continue;
+    printf("%s (%d): %d\n", p->name, p->pid, p->state);
+  }
+  return 0;
+}
