@@ -21,14 +21,14 @@ int main(int argc, char *argv[]) {
   16:	0007871b          	sext.w	a4,a5
   1a:	4785                	li	a5,1
   1c:	00e7cb63          	blt	a5,a4,32 <main+0x32>
-    printf("Hello World!\n");
+    printf("Hello World\n");
   20:	00001517          	auipc	a0,0x1
   24:	d6050513          	addi	a0,a0,-672 # d80 <malloc+0x140>
   28:	00001097          	auipc	ra,0x1
   2c:	a24080e7          	jalr	-1500(ra) # a4c <printf>
   30:	a831                	j	4c <main+0x4c>
   } else {
-    printf("Nice to meet you %s!\n", argv[1]);
+    printf("Hello %s, nice to meet you!\n", argv[1]);
   32:	fe043783          	ld	a5,-32(s0)
   36:	07a1                	addi	a5,a5,8
   38:	639c                	ld	a5,0(a5)
@@ -1183,7 +1183,7 @@ vprintf(int fd, const char *fmt, va_list ap)
  902:	eb8d                	bnez	a5,934 <vprintf+0x1a6>
           s = "(null)";
  904:	00000797          	auipc	a5,0x0
- 908:	4a478793          	addi	a5,a5,1188 # da8 <malloc+0x168>
+ 908:	4ac78793          	addi	a5,a5,1196 # db0 <malloc+0x170>
  90c:	fef43423          	sd	a5,-24(s0)
         while(*s != 0){
  910:	a015                	j	934 <vprintf+0x1a6>
