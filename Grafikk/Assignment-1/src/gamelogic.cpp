@@ -40,6 +40,7 @@ SceneNode* padNode;
 SceneNode* lightNode1;
 SceneNode* lightNode2;
 SceneNode* lightNode3;
+SceneNode* movingLightNode;
 
 double ballRadius = 3.0f;
 
@@ -146,18 +147,23 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
     // here I am creating the lights
     lightNode1 = createSceneNode();
     lightNode1->nodeType = POINT_LIGHT;
-    lightNode1->position = glm::vec3(5.0f, 0.0f, -10.0f);
+    lightNode1->position = glm::vec3(-25.0f, -40.0f, -40.0f);
     rootNode->children.push_back(lightNode1);
 
     lightNode2 = createSceneNode();
     lightNode2->nodeType = POINT_LIGHT;
-    lightNode2->position = glm::vec3(-5.0f, 0.0f, -10.0f);
+    lightNode2->position = glm::vec3(0.0f, -40.0f, -40.0f);
     rootNode->children.push_back(lightNode2);
 
-    // Moving light I am adding it as a child to the pad
     lightNode3 = createSceneNode();
     lightNode3->nodeType = POINT_LIGHT;
-    addChild(padNode, lightNode3);
+    lightNode3->position = glm::vec3(25.0f, -40.0f, -40.0f);
+    rootNode->children.push_back(lightNode3);
+
+    // Moving light I am adding it as a child to the pad
+    movingLightNode = createSceneNode();
+    movingLightNode->nodeType = POINT_LIGHT;
+    addChild(padNode, movingLightNode);
 
     getTimeDeltaSeconds();
 
@@ -351,8 +357,8 @@ void updateFrame(GLFWwindow* window) {
     // ballposition
     glm::vec3 ballPosition(0, ballRadius + padDimensions.y, boxDimensions.z / 2);
 
-    SceneNode* lightNode3 = padNode->children[0];
-    lightNode3->position = padNode->position + glm::vec3(-40.0f, 35.0f, 0.0f);
+    SceneNode* movingLightNode = padNode->children[0];
+    movingLightNode->position = padNode->position + glm::vec3(-90.0f, 35.0f, 0.0f);
 
     updateNodeTransformations(rootNode, VP);
 
@@ -367,6 +373,11 @@ void updateFrame(GLFWwindow* window) {
     // blue light
     glUniform3fv(shader->getUniformFromName("lights[2].position"), 1, glm::value_ptr(lightNode3->position));
     glUniform3fv(shader->getUniformFromName("lights[2].color"), 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 1.0f)));
+
+    // moving light
+    glUniform3fv(shader->getUniformFromName("lights[3].position"), 1, glm::value_ptr(movingLightNode->position));
+    glUniform3fv(shader->getUniformFromName("lights[3].color"), 1, glm::value_ptr(glm::vec3(0.0f, 1.0f, 1.0f)));
+
 }
 
 void updateNodeTransformations(SceneNode* node, glm::mat4 transformationThusFar) {
@@ -412,7 +423,6 @@ void renderNode(SceneNode* node) {
     // Calculate and send normal matrix for normal transformation
     glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(node->modelMatrix)));
     glUniformMatrix3fv(5, 1, GL_FALSE, glm::value_ptr(normalMatrix));
-
 
     // send ball position to shader
     glUniform3fv(shader->getUniformFromName("ballPosition"), 1, glm::value_ptr(ballPosition));

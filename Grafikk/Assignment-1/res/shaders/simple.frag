@@ -11,7 +11,7 @@ in layout(location = 2) vec3 fragmentPosition;
 
 uniform vec3 cameraPosition;
 uniform vec3 ballPosition;
-uniform Light lights[3];
+uniform Light lights[4];
 
 out vec4 color;
 
@@ -53,7 +53,7 @@ void main() {
     vec3 specular = vec3(0.0);
     vec3 viewDir = normalize(cameraPosition - fragmentPosition);
 
-    for(int i = 0; i < 3; i++) {
+    for(int i = 0; i < 4; i++) {
         if (!isInShadow(lights[i].position)) {
             vec3 lightDir = normalize(lights[i].position - fragmentPosition);
             float distance = length(lights[i].position - fragmentPosition);
