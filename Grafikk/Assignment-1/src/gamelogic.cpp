@@ -140,10 +140,22 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
     ballNode->vertexArrayObjectID = ballVAO;
     ballNode->VAOIndexCount       = sphere.indices.size();
 
+    // here I am creating the lights
+    SceneNode* lightNode1 = createSceneNode();
+    lightNode1->nodeType = POINT_LIGHT;
+    lightNode1->position = glm::vec3(10.0f, 5.0f, 10.0f);
+    rootNode->children.push_back(lightNode1);
 
+    SceneNode* lightNode2 = createSceneNode();
+    lightNode2->nodeType = POINT_LIGHT;
+    lightNode2->position = glm::vec3(-10.0f, 5.0f, 10.0f);
+    rootNode->children.push_back(lightNode2);
 
-
-
+    // Moving light I am adding it as a child to the pad
+    SceneNode* lightNode3 = createSceneNode();
+    lightNode3->nodeType = POINT_LIGHT;
+    lightNode3->position = glm::vec3(0.0f, 1.0f, 0.0f);
+    addChild(padNode, lightNode3);
 
     getTimeDeltaSeconds();
 
@@ -334,10 +346,16 @@ void updateFrame(GLFWwindow* window) {
         boxNode->position.z - (boxDimensions.z/2) + (padDimensions.z/2) + (1 - padPositionZ) * (boxDimensions.z - padDimensions.z)
     };
 
+    SceneNode* lightNode3 = padNode->children[0];
+    lightNode3->position = padNode->position + glm::vec3(0.0f, 1.0f, 0.0f);
+
     updateNodeTransformations(rootNode, VP);
 
-
-
+    // Pass light positions to shader
+    glUniform3fv(shader->getUniformFromName("lightPosition1"), 1, glm::value_ptr(rootNode->children[3]->position));
+    glUniform3fv(shader->getUniformFromName("lightPosition2"), 1, glm::value_ptr(rootNode->children[4]->position));
+    // get light 3 from the pad
+    glUniform3fv(shader->getUniformFromName("lightPosition3"), 1, glm::value_ptr(lightNode3->position));
 
 }
 
@@ -351,7 +369,16 @@ void updateNodeTransformations(SceneNode* node, glm::mat4 transformationThusFar)
             * glm::scale(node->scale)
             * glm::translate(-node->referencePoint);
 
+    // Here I store model matrix for transforming vertices
+    node->modelMatrix = transformationMatrix;
     node->currentTransformationMatrix = transformationThusFar * transformationMatrix;
+
+    // Here I compute the light positions
+    if(node->nodeType == POINT_LIGHT) {
+        // Transform light position from local to world space
+        glm::vec4 lightPos = node->modelMatrix * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        node->position = glm::vec3(lightPos);
+    }
 
     switch(node->nodeType) {
         case GEOMETRY: break;
@@ -365,7 +392,13 @@ void updateNodeTransformations(SceneNode* node, glm::mat4 transformationThusFar)
 }
 
 void renderNode(SceneNode* node) {
+    // Here we send the model matrix and the current transformation matrix
     glUniformMatrix4fv(3, 1, GL_FALSE, glm::value_ptr(node->currentTransformationMatrix));
+    glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(node->modelMatrix));
+
+    // Calculate and send normal matrix for normal transformation
+    glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(node->modelMatrix)));
+    glUniformMatrix3fv(5, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
     switch(node->nodeType) {
         case GEOMETRY:
