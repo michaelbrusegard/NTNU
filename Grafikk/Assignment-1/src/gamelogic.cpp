@@ -143,18 +143,17 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
     // here I am creating the lights
     SceneNode* lightNode1 = createSceneNode();
     lightNode1->nodeType = POINT_LIGHT;
-    lightNode1->position = glm::vec3(10.0f, 5.0f, 10.0f);
+    lightNode1->position = glm::vec3(60.0f, 30.0f, -40.0f);
     rootNode->children.push_back(lightNode1);
 
     SceneNode* lightNode2 = createSceneNode();
     lightNode2->nodeType = POINT_LIGHT;
-    lightNode2->position = glm::vec3(-10.0f, 5.0f, 10.0f);
+    lightNode2->position = glm::vec3(-60.0f, 30.0f, -40.0f);
     rootNode->children.push_back(lightNode2);
 
     // Moving light I am adding it as a child to the pad
     SceneNode* lightNode3 = createSceneNode();
     lightNode3->nodeType = POINT_LIGHT;
-    lightNode3->position = glm::vec3(0.0f, 1.0f, 0.0f);
     addChild(padNode, lightNode3);
 
     getTimeDeltaSeconds();
