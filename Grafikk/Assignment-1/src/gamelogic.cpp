@@ -345,6 +345,9 @@ void updateFrame(GLFWwindow* window) {
         boxNode->position.z - (boxDimensions.z/2) + (padDimensions.z/2) + (1 - padPositionZ) * (boxDimensions.z - padDimensions.z)
     };
 
+    // ballposition
+    glm::vec3 ballPosition(0, ballRadius + padDimensions.y, boxDimensions.z / 2);
+
     SceneNode* lightNode3 = padNode->children[0];
     lightNode3->position = padNode->position + glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -379,6 +382,9 @@ void updateNodeTransformations(SceneNode* node, glm::mat4 transformationThusFar)
         node->position = glm::vec3(lightPos);
     }
 
+    // store ball position
+    ballNode->position = ballPosition;
+
     switch(node->nodeType) {
         case GEOMETRY: break;
         case POINT_LIGHT: break;
@@ -398,6 +404,10 @@ void renderNode(SceneNode* node) {
     // Calculate and send normal matrix for normal transformation
     glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(node->modelMatrix)));
     glUniformMatrix3fv(5, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+
+    // send ball position to shader
+    glUniform3fv(shader->getUniformFromName("ballPosition"), 1, glm::value_ptr(ballPosition));
 
     switch(node->nodeType) {
         case GEOMETRY:
