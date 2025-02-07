@@ -19,10 +19,34 @@ float rand(vec2 co) { return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758
 float dither(vec2 uv) { return (rand(uv)*2.0-1.0) / 256.0; }
 
 const float BALL_RADIUS = 3.0;
+const float SOFT_RADIUS = 6.0;
 
 vec3 reject(vec3 from, vec3 onto) {
     return from - onto * dot(from, onto) / dot(onto, onto);
 }
+
+float getShadowFactor(vec3 lightPos) {
+    vec3 lightDir = lightPos - fragmentPosition;
+    vec3 ballDir = ballPosition - fragmentPosition;
+
+    float lightDist = length(lightDir);
+    float ballDist = length(ballDir);
+    if (lightDist < ballDist) return 1.0;
+
+    if (dot(normalize(lightDir), normalize(ballDir)) < 0.0) return 1.0;
+
+    vec3 rejection = reject(ballDir, normalize(lightDir));
+    float rejectionLength = length(rejection);
+
+    if (rejectionLength < BALL_RADIUS) return 0.0;
+
+    if (rejectionLength < SOFT_RADIUS) {
+        return smoothstep(BALL_RADIUS, SOFT_RADIUS, rejectionLength);
+    }
+
+    return 1.0;
+}
+
 
 bool isInShadow(vec3 lightPos) {
     vec3 lightDir = lightPos - fragmentPosition;
@@ -53,20 +77,22 @@ void main() {
     vec3 specular = vec3(0.0);
     vec3 viewDir = normalize(cameraPosition - fragmentPosition);
 
-    for(int i = 0; i < 4; i++) {
-        if (!isInShadow(lights[i].position)) {
+for(int i = 0; i < 3; i++) {
+        float shadowFactor = getShadowFactor(lights[i].position);
+        if (shadowFactor > 0.0) {
             vec3 lightDir = normalize(lights[i].position - fragmentPosition);
             float distance = length(lights[i].position - fragmentPosition);
             float attenuation = 1.0 / (la + lb * distance + lc * distance * distance);
 
             float diff = max(dot(N, lightDir), 0.0);
-            diffuse += diff * diffuseColor * attenuation * lights[i].color;
+            diffuse += diff * diffuseColor * attenuation * lights[i].color * shadowFactor;
 
             vec3 reflectDir = reflect(-lightDir, N);
             float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-            specular += spec * specularColor * attenuation * lights[i].color;
+            specular += spec * specularColor * attenuation * lights[i].color * shadowFactor;
         }
     }
+
 
     color = vec4(ambient + diffuse + specular, 1.0) + 
             vec4(dither(textureCoordinates), dither(textureCoordinates), dither(textureCoordinates), 0.0);
