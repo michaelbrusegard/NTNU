@@ -126,4 +126,9 @@ struct proc
     struct file *ofile[NOFILE];  // Open files
     struct inode *cwd;           // Current directory
     char name[16];               // Process name (debugging)
+
+
+    int priority;           // Current priority level (0 is highest)
+    int ticks_left;        // Remaining ticks in current time slice
+    int queue_ticks;       // Number of ticks accumulated at current level
 };
