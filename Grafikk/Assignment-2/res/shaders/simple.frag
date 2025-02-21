@@ -53,7 +53,6 @@ float getShadowFactor(vec3 lightPos) {
     return 1.0;
 }
 
-
 bool isInShadow(vec3 lightPos) {
     vec3 lightDir = lightPos - fragmentPosition;
     vec3 ballDir = ballPosition - fragmentPosition;
@@ -71,12 +70,13 @@ bool isInShadow(vec3 lightPos) {
 void main() {
     vec3 normalTexture = TBN * (texture(normalTextureSample, textureCoordinates).xyz * 2 - 1);
     vec4 brickTexture = texture(textureSample, textureCoordinates);
+    float roughness = texture(roughnessTextureSample, textureCoordinates).r;
+    float shininess = 5.0 / (roughness * roughness);
 
     vec3 N = hasTexture ? normalize(normal) : normalTexture;
     vec3 ambient = vec3(0.1);
     vec3 diffuseColor = vec3(0.3);
     vec3 specularColor = vec3(1.0);
-    float shininess = 8.0;
 
     float la = 0.0002;
     float lb = 0.0002;
@@ -101,7 +101,6 @@ void main() {
             specular += spec * specularColor * attenuation * lights[i].color * shadowFactor;
         }
     }
-
 
     color = vec4(ambient + diffuse + specular + dither(textureCoordinates), 1.0) * brickTexture;
 }
