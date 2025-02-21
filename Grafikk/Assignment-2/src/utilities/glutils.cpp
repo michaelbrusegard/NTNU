@@ -45,8 +45,8 @@ void tangent(std::vector<glm::vec3> vertices, std::vector<glm::vec2> uvs) {
     bitangents.push_back(bitangent);
   };
 
-  generateAttribute(3, 3, tangents, false);
-  generateAttribute(4, 3, bitangents, false);
+  generateAttribute(4, 3, tangents, false);
+  generateAttribute(5, 3, bitangents, false);
 }
 
 unsigned int generateBuffer(Mesh &mesh) {

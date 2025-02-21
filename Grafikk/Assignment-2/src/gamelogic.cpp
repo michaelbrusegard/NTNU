@@ -478,7 +478,7 @@ void setup2Duniforms() {
 
 void renderNode(SceneNode* node) {
     // Here we send the model matrix and the current transformation matrix
-    glUniformMatrix4fv(shader->getUniformFromName("MVP"), 1, GL_FALSE, glm::value_ptr(node->currentTransformationMatrix));
+    glUniformMatrix4fv(3, 1, GL_FALSE, glm::value_ptr(node->currentTransformationMatrix));
     glUniformMatrix4fv(shader->getUniformFromName("modelMatrix"), 1, GL_FALSE, glm::value_ptr(node->modelMatrix));
 
     // Calculate and send normal matrix for normal transformation

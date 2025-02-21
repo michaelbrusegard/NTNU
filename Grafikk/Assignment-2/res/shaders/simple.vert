@@ -4,11 +4,11 @@ in layout(location = 0) vec3 position;
 in layout(location = 1) vec3 normal_in;
 in layout(location = 2) vec2 textureCoordinates_in;
 
-uniform mat4 MVP;
+uniform layout(location = 3) mat4 MVP;
 uniform mat4 modelMatrix;
 uniform mat3 normalMatrix;
-uniform layout(location = 3) vec3 tangents;
-uniform layout(location = 4) vec3 bitangents;
+uniform layout(location = 4) vec3 tangents;
+uniform layout(location = 5) vec3 bitangents;
 
 out layout(location = 0) vec3 normal_out;
 out layout(location = 1) vec2 textureCoordinates_out;
