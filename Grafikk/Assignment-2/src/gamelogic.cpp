@@ -508,6 +508,7 @@ void renderNode(SceneNode* node) {
             break;
         case GEOMETRY_2D:
             if(node->vertexArrayObjectID != -1) {
+                glUniformMatrix4fv(shader2d->getUniformFromName("MVP"), 1, GL_FALSE, glm::value_ptr(node->currentTransformationMatrix));
                 glBindTextureUnit(0, node->textureID);
                 glBindVertexArray(node->vertexArrayObjectID);
                 glDrawElements(GL_TRIANGLES, node->VAOIndexCount, GL_UNSIGNED_INT, nullptr);

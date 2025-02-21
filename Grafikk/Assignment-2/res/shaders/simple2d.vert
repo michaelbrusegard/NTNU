@@ -3,7 +3,7 @@
 in layout(location = 0) vec3 position;
 in layout(location = 2) vec2 textureCoordinates_in;
 
-uniform layout(location = 3) mat4 MVP;
+uniform mat4 MVP;
 uniform mat4 ortho;
 
 out layout(location = 2) vec2 textureCoordinates_out;
