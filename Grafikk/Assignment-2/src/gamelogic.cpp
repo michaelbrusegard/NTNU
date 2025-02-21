@@ -34,6 +34,7 @@ unsigned int currentKeyFrame = 0;
 unsigned int previousKeyFrame = 0;
 
 SceneNode* rootNode;
+SceneNode* rootNode2d;
 SceneNode* boxNode;
 SceneNode* ballNode;
 SceneNode* padNode;
@@ -41,12 +42,16 @@ SceneNode* lightNode1;
 SceneNode* lightNode2;
 SceneNode* lightNode3;
 SceneNode* movingLightNode;
+SceneNode* textNode;
 
 double ballRadius = 3.0f;
+
+glm::mat4 orthoVP;
 
 // These are heap allocated, because they should not be initialised at the start of the program
 sf::SoundBuffer* buffer;
 Gloom::Shader* shader;
+Gloom::Shader* shader2d;
 sf::Sound* sound;
 
 const glm::vec3 boxDimensions(180, 90, 90);
@@ -94,13 +99,27 @@ void mouseCallback(GLFWwindow* window, double x, double y) {
     glfwSetCursorPos(window, windowWidth / 2, windowHeight / 2);
 }
 
-//// A few lines to help you if you've never used c++ structs
-// struct LightSource {
-//     bool a_placeholder_value;
-// };
-// LightSource lightSources[/*Put number of light sources you want here*/];
+GLuint charmapTexture;
+
+// Function which takes in an image loaded into memory
+GLuint createTextureFromImage(const PNGImage& image) {
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Texture parameters
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.pixels.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Mipmap
+    glGenerateMipmap(GL_TEXTURE_2D);
+    return textureID;
+}
 
 void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
+    orthoVP = glm::ortho(0.0f, (float) windowWidth, 0.0f, (float) windowHeight, -1.0f, 1.0f);
+
     buffer = new sf::SoundBuffer();
     if (!buffer->loadFromFile("../res/Hall of the Mountain King.ogg")) {
         return;
@@ -115,6 +134,18 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
     shader->makeBasicShader("../res/shaders/simple.vert", "../res/shaders/simple.frag");
     shader->activate();
 
+    shader2d = new Gloom::Shader();
+    shader2d->makeBasicShader("../res/shaders/simple2d.vert", "../res/shaders/simple2d.frag");
+
+    PNGImage charmap = loadPNGFile("../res/textures/charmap.png");
+    charmapTexture = createTextureFromImage(charmap);
+
+    std::string text = "START GAME";
+    float charRatio = 39.0f / 29.0f;
+    float totalTextWidth = text.length() * 29.0f;
+    Mesh textMesh = generateTextGeometryBuffer(text, charRatio, totalTextWidth);
+    unsigned int textVAO = generateBuffer(textMesh);
+
     // Create meshes
     Mesh pad = cube(padDimensions, glm::vec2(30, 40), true);
     Mesh box = cube(boxDimensions, glm::vec2(90), true, true);
@@ -127,6 +158,7 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
 
     // Construct scene
     rootNode = createSceneNode();
+    rootNode2d = createSceneNode();
     boxNode  = createSceneNode();
     padNode  = createSceneNode();
     ballNode = createSceneNode();
@@ -143,6 +175,15 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
 
     ballNode->vertexArrayObjectID = ballVAO;
     ballNode->VAOIndexCount       = sphere.indices.size();
+
+    // Create text node
+    SceneNode* textNode = createSceneNode();
+    textNode->nodeType = GEOMETRY_2D;
+    textNode->vertexArrayObjectID = textVAO;
+    textNode->VAOIndexCount = textMesh.indices.size();
+    textNode->textureID = charmapTexture;
+    textNode->position = glm::vec3((windowWidth - totalTextWidth) / 2, (windowHeight - 29.0f) / 2, 0.0f);
+    rootNode2d->children.push_back(textNode);
 
     // here I am creating the lights
     lightNode1 = createSceneNode();
@@ -242,7 +283,7 @@ void updateFrame(GLFWwindow* window) {
                 isPaused = true;
                 if (options.enableMusic) {
                     sound->pause();
-                }
+}
             }
             // Get the timing for the beat of the song
             for (unsigned int i = currentKeyFrame; i < keyFrameTimeStamps.size(); i++) {
@@ -361,23 +402,7 @@ void updateFrame(GLFWwindow* window) {
     movingLightNode->position = padNode->position + glm::vec3(-90.0f, 35.0f, 0.0f);
 
     updateNodeTransformations(rootNode, VP);
-
-    // red light
-    glUniform3fv(shader->getUniformFromName("lights[0].position"), 1, glm::value_ptr(lightNode1->position));
-    glUniform3fv(shader->getUniformFromName("lights[0].color"), 1, glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));
-
-    // green light
-    glUniform3fv(shader->getUniformFromName("lights[1].position"), 1, glm::value_ptr(lightNode2->position));
-    glUniform3fv(shader->getUniformFromName("lights[1].color"), 1, glm::value_ptr(glm::vec3(0.0f, 1.0f, 0.0f)));
-
-    // blue light
-    glUniform3fv(shader->getUniformFromName("lights[2].position"), 1, glm::value_ptr(lightNode3->position));
-    glUniform3fv(shader->getUniformFromName("lights[2].color"), 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 1.0f)));
-
-    // moving light
-    glUniform3fv(shader->getUniformFromName("lights[3].position"), 1, glm::value_ptr(movingLightNode->position));
-    glUniform3fv(shader->getUniformFromName("lights[3].color"), 1, glm::value_ptr(glm::vec3(0.0f, 1.0f, 1.0f)));
-
+    updateNodeTransformations(rootNode2d, glm::mat4(1.0f));
 }
 
 void updateNodeTransformations(SceneNode* node, glm::mat4 transformationThusFar) {
@@ -415,6 +440,28 @@ void updateNodeTransformations(SceneNode* node, glm::mat4 transformationThusFar)
     }
 }
 
+void setup3Duniforms() {
+    // red light
+    glUniform3fv(shader->getUniformFromName("lights[0].position"), 1, glm::value_ptr(lightNode1->position));
+    glUniform3fv(shader->getUniformFromName("lights[0].color"), 1, glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));
+
+    // green light
+    glUniform3fv(shader->getUniformFromName("lights[1].position"), 1, glm::value_ptr(lightNode2->position));
+    glUniform3fv(shader->getUniformFromName("lights[1].color"), 1, glm::value_ptr(glm::vec3(0.0f, 1.0f, 0.0f)));
+
+    // blue light
+    glUniform3fv(shader->getUniformFromName("lights[2].position"), 1, glm::value_ptr(lightNode3->position));
+    glUniform3fv(shader->getUniformFromName("lights[2].color"), 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 1.0f)));
+
+    // moving light
+    glUniform3fv(shader->getUniformFromName("lights[3].position"), 1, glm::value_ptr(movingLightNode->position));
+    glUniform3fv(shader->getUniformFromName("lights[3].color"), 1, glm::value_ptr(glm::vec3(0.0f, 1.0f, 1.0f)));
+};
+
+void setup2Duniforms() {
+    glUniformMatrix4fv(shader2d->getUniformFromName("ortho"), 1, GL_FALSE, glm::value_ptr(orthoVP));
+}
+
 void renderNode(SceneNode* node) {
     // Here we send the model matrix and the current transformation matrix
     glUniformMatrix4fv(3, 1, GL_FALSE, glm::value_ptr(node->currentTransformationMatrix));
@@ -434,6 +481,14 @@ void renderNode(SceneNode* node) {
                 glDrawElements(GL_TRIANGLES, node->VAOIndexCount, GL_UNSIGNED_INT, nullptr);
             }
             break;
+        case GEOMETRY_2D:
+            if(node->vertexArrayObjectID != -1) {
+                glBindTextureUnit(0, node->textureID);
+                glBindVertexArray(node->vertexArrayObjectID);
+                glDrawElements(GL_TRIANGLES, node->VAOIndexCount, GL_UNSIGNED_INT, nullptr);
+            }
+            break;
+
         case POINT_LIGHT: break;
         case SPOT_LIGHT: break;
     }
@@ -448,5 +503,11 @@ void renderFrame(GLFWwindow* window) {
     glfwGetWindowSize(window, &windowWidth, &windowHeight);
     glViewport(0, 0, windowWidth, windowHeight);
 
+    shader->activate();
+    setup3Duniforms();
     renderNode(rootNode);
+
+    shader2d->activate();
+    setup2Duniforms();
+    renderNode(rootNode2d);
 }

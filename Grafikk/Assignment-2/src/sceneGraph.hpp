@@ -6,6 +6,7 @@
 
 #include <stack>
 #include <vector>
+#include <glad/glad.h>
 #include <cstdio>
 #include <stdbool.h>
 #include <cstdlib> 
@@ -14,7 +15,7 @@
 #include <fstream>
 
 enum SceneNodeType {
-	GEOMETRY, POINT_LIGHT, SPOT_LIGHT
+	GEOMETRY, POINT_LIGHT, SPOT_LIGHT, GEOMETRY_2D
 };
 
 struct SceneNode {
@@ -55,6 +56,9 @@ struct SceneNode {
 
 	// Node type is used to determine how to handle the contents of a node
 	SceneNodeType nodeType;
+
+  GLuint textureID;
+  GLuint normalMapID;
 };
 
 SceneNode* createSceneNode();
