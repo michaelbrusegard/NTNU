@@ -8,10 +8,16 @@ struct Light {
 in layout(location = 0) vec3 normal;
 in layout(location = 1) vec2 textureCoordinates;
 in layout(location = 2) vec3 fragmentPosition;
+in layout(location = 3) mat3 TBN;
 
 uniform vec3 cameraPosition;
 uniform vec3 ballPosition;
 uniform Light lights[4];
+
+layout(binding = 0) uniform sampler2D textureSample;
+layout(binding = 1) uniform sampler2D normalTextureSample;
+layout(binding = 2) uniform sampler2D roughnessTextureSample;
+uniform bool hasTexture;
 
 out vec4 color;
 
@@ -63,7 +69,10 @@ bool isInShadow(vec3 lightPos) {
 }
 
 void main() {
-    vec3 N = normalize(normal);
+    vec3 normalTexture = TBN * (texture(normalTextureSample, textureCoordinates).xyz * 2 - 1);
+    vec4 brickTexture = texture(textureSample, textureCoordinates);
+
+    vec3 N = hasTexture ? normalize(normal) : normalTexture;
     vec3 ambient = vec3(0.1);
     vec3 diffuseColor = vec3(0.3);
     vec3 specularColor = vec3(1.0);
@@ -77,7 +86,7 @@ void main() {
     vec3 specular = vec3(0.0);
     vec3 viewDir = normalize(cameraPosition - fragmentPosition);
 
-for(int i = 0; i < 3; i++) {
+    for(int i = 0; i < 4; i++) {
         float shadowFactor = getShadowFactor(lights[i].position);
         if (shadowFactor > 0.0) {
             vec3 lightDir = normalize(lights[i].position - fragmentPosition);
@@ -94,6 +103,5 @@ for(int i = 0; i < 3; i++) {
     }
 
 
-    color = vec4(ambient + diffuse + specular, 1.0) + 
-            vec4(dither(textureCoordinates), dither(textureCoordinates), dither(textureCoordinates), 0.0);
+    color = vec4(ambient + diffuse + specular + dither(textureCoordinates), 1.0) * brickTexture;
 }

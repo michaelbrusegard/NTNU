@@ -100,6 +100,9 @@ void mouseCallback(GLFWwindow* window, double x, double y) {
 }
 
 GLuint charmapTexture;
+GLuint brickTexture;
+GLuint brickNormalTexture;
+GLuint brickRoughnessTexture;
 
 // Function which takes in an image loaded into memory
 GLuint createTextureFromImage(const PNGImage& image) {
@@ -140,6 +143,13 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
     PNGImage charmap = loadPNGFile("../res/textures/charmap.png");
     charmapTexture = createTextureFromImage(charmap);
 
+    PNGImage brick = loadPNGFile("../res/textures/Brick03_col.png");
+    brickTexture = createTextureFromImage(brick);
+    PNGImage brickNormal = loadPNGFile("../res/textures/Brick03_nrm.png");
+    brickNormalTexture = createTextureFromImage(brickNormal);
+    PNGImage brickRoughness = loadPNGFile("../res/textures/Brick03_rgh.png");
+    brickRoughnessTexture = createTextureFromImage(brickRoughness);
+
     std::string text = "START GAME";
     float charRatio = 39.0f / 29.0f;
     float totalTextWidth = text.length() * 29.0f;
@@ -169,6 +179,10 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
 
     boxNode->vertexArrayObjectID  = boxVAO;
     boxNode->VAOIndexCount        = box.indices.size();
+    boxNode->nodeType = NORMAL_MAPPED;
+    boxNode->textureID = brickTexture;
+    boxNode->normalMapID = brickNormalTexture;
+    boxNode->roughnesstextureID = brickRoughnessTexture;
 
     padNode->vertexArrayObjectID  = padVAO;
     padNode->VAOIndexCount        = pad.indices.size();
@@ -188,17 +202,17 @@ void initGame(GLFWwindow* window, CommandLineOptions gameOptions) {
     // here I am creating the lights
     lightNode1 = createSceneNode();
     lightNode1->nodeType = POINT_LIGHT;
-    lightNode1->position = glm::vec3(-25.0f, -40.0f, -40.0f);
+    lightNode1->position = glm::vec3(-25.0f, -40.0f, -75.0f);
     rootNode->children.push_back(lightNode1);
 
     lightNode2 = createSceneNode();
     lightNode2->nodeType = POINT_LIGHT;
-    lightNode2->position = glm::vec3(0.0f, -40.0f, -40.0f);
+    lightNode2->position = glm::vec3(0.0f, -40.0f, -75.0f);
     rootNode->children.push_back(lightNode2);
 
     lightNode3 = createSceneNode();
     lightNode3->nodeType = POINT_LIGHT;
-    lightNode3->position = glm::vec3(25.0f, -40.0f, -40.0f);
+    lightNode3->position = glm::vec3(25.0f, -40.0f, -75.0f);
     rootNode->children.push_back(lightNode3);
 
     // Moving light I am adding it as a child to the pad
@@ -399,7 +413,7 @@ void updateFrame(GLFWwindow* window) {
     glm::vec3 ballPosition(0, ballRadius + padDimensions.y, boxDimensions.z / 2);
 
     SceneNode* movingLightNode = padNode->children[0];
-    movingLightNode->position = padNode->position + glm::vec3(-90.0f, 35.0f, 0.0f);
+    movingLightNode->position = padNode->position + glm::vec3(0.0f, 0.0f, 10.0f);
 
     updateNodeTransformations(rootNode, VP);
     updateNodeTransformations(rootNode2d, glm::mat4(1.0f));
@@ -464,12 +478,12 @@ void setup2Duniforms() {
 
 void renderNode(SceneNode* node) {
     // Here we send the model matrix and the current transformation matrix
-    glUniformMatrix4fv(3, 1, GL_FALSE, glm::value_ptr(node->currentTransformationMatrix));
-    glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(node->modelMatrix));
+    glUniformMatrix4fv(shader->getUniformFromName("MVP"), 1, GL_FALSE, glm::value_ptr(node->currentTransformationMatrix));
+    glUniformMatrix4fv(shader->getUniformFromName("modelMatrix"), 1, GL_FALSE, glm::value_ptr(node->modelMatrix));
 
     // Calculate and send normal matrix for normal transformation
     glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(node->modelMatrix)));
-    glUniformMatrix3fv(5, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+    glUniformMatrix3fv(shader->getUniformFromName("normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
     // send ball position to shader
     glUniform3fv(shader->getUniformFromName("ballPosition"), 1, glm::value_ptr(ballPosition));
@@ -477,6 +491,17 @@ void renderNode(SceneNode* node) {
     switch(node->nodeType) {
         case GEOMETRY:
             if(node->vertexArrayObjectID != -1) {
+                glUniform1i(shader->getUniformFromName("hasTexture"), 0);
+                glBindVertexArray(node->vertexArrayObjectID);
+                glDrawElements(GL_TRIANGLES, node->VAOIndexCount, GL_UNSIGNED_INT, nullptr);
+            }
+            break;
+        case NORMAL_MAPPED:
+            if(node->vertexArrayObjectID != -1) {
+                glUniform1i(shader->getUniformFromName("hasTexture"), 1);
+                glBindTextureUnit(0, node->textureID);
+                glBindTextureUnit(1, node->normalMapID);
+                glBindTextureUnit(2, node->roughnesstextureID);
                 glBindVertexArray(node->vertexArrayObjectID);
                 glDrawElements(GL_TRIANGLES, node->VAOIndexCount, GL_UNSIGNED_INT, nullptr);
             }

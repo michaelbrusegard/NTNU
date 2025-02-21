@@ -15,7 +15,7 @@
 #include <fstream>
 
 enum SceneNodeType {
-	GEOMETRY, POINT_LIGHT, SPOT_LIGHT, GEOMETRY_2D
+	GEOMETRY, POINT_LIGHT, SPOT_LIGHT, GEOMETRY_2D, NORMAL_MAPPED
 };
 
 struct SceneNode {
@@ -29,7 +29,9 @@ struct SceneNode {
         VAOIndexCount = 0;
 
         nodeType = GEOMETRY;
-
+    textureID = -1;
+    normalMapID = -1;
+    roughnesstextureID = -1;
 	}
 
 	// A list of all children that belong to this node.
@@ -59,6 +61,7 @@ struct SceneNode {
 
   GLuint textureID;
   GLuint normalMapID;
+  GLuint roughnesstextureID;
 };
 
 SceneNode* createSceneNode();
