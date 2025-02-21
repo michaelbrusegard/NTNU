@@ -69,7 +69,7 @@ bool isInShadow(vec3 lightPos) {
 }
 
 void main() {
-    vec3 normalTexture = TBN * (texture(normalTextureSample, textureCoordinates).xyz * 2 - 1);
+    vec3 normalTexture = (texture(normalTextureSample, textureCoordinates).xyz * 2 - 1);
     vec4 brickTexture = texture(textureSample, textureCoordinates);
 
     vec3 N = hasTexture ? normalize(normal) : normalTexture;
