@@ -1,0 +1,33 @@
+.myForm,.myButton{
+    width:100%;
+    padding: 0vh 1vw;
+
+}
+.myButton{
+    padding: 1vh 1vw;
+}
+
+.myBackground{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.whiteBox{
+    background-color: white;
+    padding: 1vh 1vw;
+    height: 70vh;
+    width: 25vw;
+    display: flex; /* Add this to make whiteBox a flex container */
+    flex-direction: column; /* This will make the items stack vertically */
+    justify-content: center;
+}
+
+.itemBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex:1;
+
+}
