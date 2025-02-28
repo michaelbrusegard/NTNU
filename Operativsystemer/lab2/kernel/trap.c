@@ -79,8 +79,10 @@ void usertrap(void)
         exit(-1);
 
     // give up the CPU if this is a timer interrupt. Interrupted user space program
-    if (which_dev == 2)
+    if (which_dev == 2) {
+        myproc()->queue_ticks++;
         yield(YIELD_TIMER);
+    }
 
     usertrapret();
 }
@@ -153,8 +155,10 @@ void kerneltrap()
 
     // give up the CPU if this is a timer interrupt. This timer interrupted the kernel
     // cannot attribute that timer interrupt to the process (e.g. IO handling in the kernel)
-    if (which_dev == 2 && myproc() != 0 && myproc()->state == RUNNING)
+    if (which_dev == 2 && myproc() != 0 && myproc()->state == RUNNING) {
+        myproc()->queue_ticks++;
         yield(YIELD_OTHER);
+    }
 
     // the yield() may have caused some traps to occur,
     // so restore trap registers for use by kernelvec.S's sepc instruction.

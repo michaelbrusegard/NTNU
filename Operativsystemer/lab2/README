@@ -49,15 +49,63 @@ riscv64-softmmu.  Once they are installed, and in your shell
 search path, you can run "make qemu".
 
 Default Scheduler
-23 71 329
-19 60 276
-14 41 191
-17 54 256
-13 35 178
-27 80 383
-8 27 131
-15 50 233
-11 30 154
-21 69 312
+15 42 213
+Executing sh took 22 ticks
 
-24-25 ticks
+13 40 205
+Executing sh took 23 ticks
+
+12 43 195
+Executing sh took 23 ticks
+
+16 47 221
+Executing sh took 23 ticks
+
+7 22 111
+Executing sh took 23 ticks
+
+14 44 214
+Executing sh took 23 ticks
+
+7 23 97
+Executing sh took 24 ticks
+
+10 38 205
+Executing sh took 23 ticks
+
+34 102 463
+Executing sh took 25 ticks
+
+13 40 175
+Executing sh took 23 ticks
+
+MLFQ Scheduler
+6 18 99
+Executing sh took 24 ticks
+
+41 125 583
+Executing sh took 24 ticks
+
+24 77 359
+Executing sh took 25 ticks
+
+16 52 248
+Executing sh took 24 ticks
+
+9 28 127
+Executing sh took 25 ticks
+
+42 132 599
+Executing sh took 25 ticks
+
+11 29 150
+Executing sh took 26 ticks
+
+11 39 203
+Executing sh took 25 ticks
+
+13 43 195
+Executing sh took 25 ticks
+
+11 38 197
+Executing sh took 26 ticks

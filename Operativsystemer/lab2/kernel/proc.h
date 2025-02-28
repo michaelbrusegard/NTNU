@@ -128,7 +128,6 @@ struct proc
     char name[16];               // Process name (debugging)
 
 
-    int priority;           // Current priority level (0 is highest)
-    int ticks_left;        // Remaining ticks in current time slice
-    int queue_ticks;       // Number of ticks accumulated at current level
+    int queue_level;      // MLFQ priority level (0 is highest)
+    int queue_ticks;      // How many ticks has the process run at current level
 };

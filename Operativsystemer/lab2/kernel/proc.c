@@ -27,17 +27,6 @@ typedef struct scheduler_impl
     int id;
 } SchedImpl;
 
-// MLFQ
-#define NQUEUES 4
-#define TICKS_PER_LEVEL 10
-
-struct mlfq_queue {
-    struct proc* queue[NPROC];
-    int front;
-    int rear;
-    struct spinlock lock;
-} mlfq[NQUEUES];
-
 // Register all available schedulers here
 // also update schedc, this indicates how long the SchedImpl array is
 #define SCHEDC 2
@@ -45,29 +34,6 @@ static SchedImpl available_schedulers[SCHEDC] = {
     {"Round Robin", &rr_scheduler, 1},
     {"MLFQ", &mlfq_scheduler, 2},
 };
-
-void mlfq_enqueue(struct proc *p);
-struct proc* mlfq_dequeue(int level);
-
-void mlfq_enqueue(struct proc *p) {
-    int level = p->priority;
-    acquire(&mlfq[level].lock);
-    mlfq[level].queue[mlfq[level].rear] = p;
-    mlfq[level].rear = (mlfq[level].rear + 1) % NPROC;
-    release(&mlfq[level].lock);
-}
-
-struct proc* mlfq_dequeue(int level) {
-    acquire(&mlfq[level].lock);
-    if(mlfq[level].front == mlfq[level].rear) {
-        release(&mlfq[level].lock);
-        return 0;
-    }
-    struct proc *p = mlfq[level].queue[mlfq[level].front];
-    mlfq[level].front = (mlfq[level].front + 1) % NPROC;
-    release(&mlfq[level].lock);
-    return p;
-}
 
 void (*sched_pointer)(void) = &rr_scheduler;
 
@@ -101,20 +67,11 @@ void procinit(void)
 
     initlock(&pid_lock, "nextpid");
     initlock(&wait_lock, "wait_lock");
-
-    for(int i = 0; i < NQUEUES; i++) {
-        initlock(&mlfq[i].lock, "mlfq");
-        mlfq[i].front = 0;
-        mlfq[i].rear = 0;
-    }
-
-    for(p = proc; p < &proc[NPROC]; p++) {
+    for (p = proc; p < &proc[NPROC]; p++)
+    {
         initlock(&p->lock, "proc");
         p->state = UNUSED;
         p->kstack = KSTACK((int)(p - proc));
-        p->priority = 0;
-        p->ticks_left = 0;
-        p->queue_ticks = 0;
     }
 }
 
@@ -262,6 +219,8 @@ allocproc(void)
 found:
     p->pid = allocpid();
     p->state = USED;
+    p->queue_level = 0;
+    p->queue_ticks = 0;
 
     // Allocate a trapframe page.
     if ((p->trapframe = (struct trapframe *)kalloc()) == 0)
@@ -285,12 +244,6 @@ found:
     memset(&p->context, 0, sizeof(p->context));
     p->context.ra = (uint64)forkret;
     p->context.sp = p->kstack + PGSIZE;
-
-    // Initialize MLFQ fields
-    p->priority = 0;
-    p->ticks_left = TICKS_PER_LEVEL;
-    p->queue_ticks = 0;
-    mlfq_enqueue(p);
 
     return p;
 }
@@ -644,40 +597,62 @@ void rr_scheduler(void)
     // Round Robin round has completed.
 }
 
-
-void mlfq_scheduler(void) {
+void mlfq_scheduler(void)
+{
     struct proc *p;
     struct cpu *c = mycpu();
+
+    #define NQUEUE 4
+    const int time_slice[NQUEUE] = {1, 2, 4, 8};
+
     c->proc = 0;
     intr_on();
-
-    while(1) {
-        for(int level = 0; level < NQUEUES; level++) {
-            p = mlfq_dequeue(level);
-            if(p != 0) {
-                acquire(&p->lock);
-                if(p->state == RUNNABLE) {
-                    p->state = RUNNING;
-                    c->proc = p;
-                    p->ticks_left = TICKS_PER_LEVEL;
-
-                    swtch(&c->context, &p->context);
-
-                    c->proc = 0;
-
-                    if(p->state == RUNNABLE) {
-                        if(p->ticks_left <= 0 && p->priority < NQUEUES-1) {
-                            p->priority++;
-                        }
-                        mlfq_enqueue(p);
-                    }
-                }
-                release(&p->lock);
+    static int boost_counter = 0;
+    boost_counter++;
+    if (boost_counter >= 100) {
+        boost_counter = 0;
+        for (p = proc; p < &proc[NPROC]; p++) {
+            acquire(&p->lock);
+            if (p->state != UNUSED) {
+                p->queue_level = 0;
+                p->queue_ticks = 0;
             }
+            release(&p->lock);
         }
     }
-}
+    for (p = proc; p < &proc[NPROC]; p++) {
+        acquire(&p->lock);
+        if (p->state == RUNNABLE && p->queue_level == 0) {
+            p->queue_level = 0;
+            p->queue_ticks = 0;
+        }
+        release(&p->lock);
+    }
 
+    for (int level = 0; level < NQUEUE; level++) {
+        for (p = proc; p < &proc[NPROC]; p++) {
+            acquire(&p->lock);
+            if (p->state == RUNNABLE && p->queue_level == level) {
+                p->state = RUNNING;
+                p->queue_ticks = 0;
+                c->proc = p;
+                swtch(&c->context, &p->context);
+                c->proc = 0;
+                if (p->queue_ticks >= time_slice[level] && p->state == RUNNABLE && 
+                    level < NQUEUE - 1) {
+                    p->queue_level++;
+                    p->queue_ticks = 0;
+                }
+            }
+            release(&p->lock);
+
+            if (c->proc != 0)
+                break;
+        }
+        if (c->proc != 0)
+            break;
+    }
+}
 
 // Switch to scheduler.  Must hold only p->lock
 // and have changed proc->state. Saves and restores
