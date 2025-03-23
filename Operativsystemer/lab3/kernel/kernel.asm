@@ -6934,18 +6934,18 @@ uint64 sys_va2pa(void)
     uint64 va;
     int pid;
     struct proc *p;
-    
-    argaddr(0, &va);   // Just call these without checking return
+
+    argaddr(0, &va);
     800032c6:	fd840593          	addi	a1,s0,-40
     800032ca:	4501                	li	a0,0
     800032cc:	00000097          	auipc	ra,0x0
     800032d0:	cbe080e7          	jalr	-834(ra) # 80002f8a <argaddr>
-    argint(1, &pid);   // since they're void functions
+    argint(1, &pid);
     800032d4:	fd440593          	addi	a1,s0,-44
     800032d8:	4505                	li	a0,1
     800032da:	00000097          	auipc	ra,0x0
     800032de:	c90080e7          	jalr	-880(ra) # 80002f6a <argint>
-    
+
     if(pid == 0) {
     800032e2:	fd442783          	lw	a5,-44(s0)
         p = myproc();
@@ -6996,7 +6996,7 @@ uint64 sys_va2pa(void)
     8000333c:	7a878793          	addi	a5,a5,1960 # 80016ae0 <tickslock>
     80003340:	00f4ff63          	bgeu	s1,a5,8000335e <sys_va2pa+0xa4>
     }
-    
+
     return va2pa_helper(p->pagetable, va);
     80003344:	fd843583          	ld	a1,-40(s0)
     80003348:	68a8                	ld	a0,80(s1)
