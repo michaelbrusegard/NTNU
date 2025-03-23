@@ -52,7 +52,6 @@ usertrap(void)
   
   if(r_scause() == 8){
     // system call
-
     if(killed(p))
       exit(-1);
 
@@ -65,14 +64,59 @@ usertrap(void)
     intr_on();
 
     syscall();
+  } else if(r_scause() == 15) {  // Store/AMO page fault
+    uint64 va = r_stval();
+    va = PGROUNDDOWN(va);
+
+    pte_t *pte = walk(p->pagetable, va, 0);
+    if(pte == 0) {
+        printf("usertrap(): page fault pte == 0\n");
+        p->killed = 1;
+        goto end;
+    }
+
+    if((*pte & PTE_V) == 0) {
+        printf("usertrap(): page not present\n");
+        p->killed = 1;
+        goto end;
+    }
+
+    if((*pte & PTE_COW) && (*pte & PTE_V)) {
+        uint64 pa = PTE2PA(*pte);
+
+        char *mem = kalloc();
+        if(mem == 0) {
+            printf("usertrap(): page fault kalloc failed\n");
+            p->killed = 1;
+            goto end;
+        }
+
+        memmove(mem, (char*)pa, PGSIZE);
+
+        uint flags = (PTE_FLAGS(*pte) | PTE_W) & ~PTE_COW;
+        uvmunmap(p->pagetable, va, 1, 0);
+        if(mappages(p->pagetable, va, PGSIZE, (uint64)mem, flags) != 0) {
+            kfree(mem);
+            printf("usertrap(): page fault mappages failed\n");
+            p->killed = 1;
+            goto end;
+        }
+
+        kfree((void*)pa);
+    } else {
+        printf("usertrap(): not a COW page fault\n");
+        p->killed = 1;
+        goto end;
+    }
   } else if((which_dev = devintr()) != 0){
     // ok
   } else {
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
-    setkilled(p);
+    p->killed = 1;
   }
 
+end:
   if(killed(p))
     exit(-1);
 

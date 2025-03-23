@@ -26,11 +26,14 @@ struct
 {
     struct spinlock lock;
     struct run *freelist;
+    uint64 ref[PHYSTOP/PGSIZE];
 } kmem;
 
 void kinit()
 {
     initlock(&kmem.lock, "kmem");
+    memset(kmem.ref, 0, sizeof(kmem.ref));
+    FREE_PAGES = 0;
     freerange(end, (void *)PHYSTOP);
     MAX_PAGES = FREE_PAGES;
 }
@@ -41,6 +44,7 @@ void freerange(void *pa_start, void *pa_end)
     p = (char *)PGROUNDUP((uint64)pa_start);
     for (; p + PGSIZE <= (char *)pa_end; p += PGSIZE)
     {
+        kmem.ref[(uint64)p/PGSIZE] = 1;
         kfree(p);
     }
 }
@@ -49,21 +53,24 @@ void freerange(void *pa_start, void *pa_end)
 // which normally should have been returned by a
 // call to kalloc().  (The exception is when
 // initializing the allocator; see kinit above.)
-void kfree(void *pa)
+void
+kfree(void *pa)
 {
-    if (MAX_PAGES != 0)
-        assert(FREE_PAGES < MAX_PAGES);
     struct run *r;
 
-    if (((uint64)pa % PGSIZE) != 0 || (char *)pa < end || (uint64)pa >= PHYSTOP)
-        panic("kfree");
-
-    // Fill with junk to catch dangling refs.
-    memset(pa, 1, PGSIZE);
-
-    r = (struct run *)pa;
+    if(((uint64)pa % PGSIZE) != 0 || (char*)pa < end || (uint64)pa >= PHYSTOP)
+      panic("kfree");
 
     acquire(&kmem.lock);
+    if(kmem.ref[(uint64)pa/PGSIZE] <= 0)
+      panic("kfree: negative reference count");
+    if(--kmem.ref[(uint64)pa/PGSIZE] > 0) {
+      release(&kmem.lock);
+      return;
+    }
+    memset(pa, 1, PGSIZE);
+
+    r = (struct run*)pa;
     r->next = kmem.freelist;
     kmem.freelist = r;
     FREE_PAGES++;
@@ -76,17 +83,37 @@ void kfree(void *pa)
 void *
 kalloc(void)
 {
-    assert(FREE_PAGES > 0);
     struct run *r;
 
     acquire(&kmem.lock);
     r = kmem.freelist;
-    if (r)
-        kmem.freelist = r->next;
+    if(r) {
+      kmem.freelist = r->next;
+      kmem.ref[(uint64)r/PGSIZE] = 1;
+      FREE_PAGES--;
+    }
     release(&kmem.lock);
 
-    if (r)
-        memset((char *)r, 5, PGSIZE); // fill with junk
-    FREE_PAGES--;
-    return (void *)r;
+    if(r)
+      memset((char*)r, 5, PGSIZE); // fill with junk
+    return (void*)r;
+}
+
+void
+increment_ref(void *pa)
+{
+    if(((uint64)pa % PGSIZE) != 0 || (char*)pa < end || (uint64)pa >= PHYSTOP)
+      panic("increment_ref");
+    acquire(&kmem.lock);
+    kmem.ref[(uint64)pa/PGSIZE]++;
+    release(&kmem.lock);
+}
+
+int
+get_ref(void *pa)
+{
+    acquire(&kmem.lock);
+    int ref = kmem.ref[(uint64)pa/PGSIZE];
+    release(&kmem.lock);
+    return ref;
 }
