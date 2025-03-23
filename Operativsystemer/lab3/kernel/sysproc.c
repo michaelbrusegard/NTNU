@@ -119,8 +119,31 @@ uint64 sys_schedset(void)
 
 uint64 sys_va2pa(void)
 {
-    printf("TODO: IMPLEMENT ME [%s@%s (line %d)]", __func__, __FILE__, __LINE__);
-    return 0;
+    uint64 va;
+    int pid;
+    struct proc *p;
+
+    argaddr(0, &va);
+    argint(1, &pid);
+
+    if(pid == 0) {
+        p = myproc();
+    } else {
+        extern struct proc proc[];
+        p = proc;
+        for(p = proc; p < &proc[NPROC]; p++) {
+            acquire(&p->lock);
+            if(p->pid == pid) {
+                release(&p->lock);
+                break;
+            }
+            release(&p->lock);
+        }
+        if(p >= &proc[NPROC])
+            return 0;
+    }
+
+    return va2pa_helper(p->pagetable, va);
 }
 
 uint64 sys_pfreepages(void)

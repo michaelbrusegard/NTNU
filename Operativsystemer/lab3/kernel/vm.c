@@ -437,3 +437,16 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
     return -1;
   }
 }
+
+uint64
+va2pa_helper(pagetable_t pagetable, uint64 va)
+{
+    pte_t *pte;
+    uint64 pa;
+
+    pte = walk(pagetable, va, 0);
+    if(pte == 0 || (*pte & PTE_V) == 0)
+        return 0;
+    pa = PTE2PA(*pte) | (va & 0xFFF);
+    return pa;
+}
